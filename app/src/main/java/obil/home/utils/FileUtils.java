@@ -1,4 +1,4 @@
-package obil.home.smshandler;
+package obil.home.utils;
 
 import android.util.Log;
 
@@ -6,18 +6,15 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 
-public final class FileStorage {
-    private static final String TAG = "FileStorage";
+public final class FileUtils {
+    private static final String TAG = "FileUtils";
     private static final String EMULATED_DIR = "emulated";
     private static final String STORAGE_DIR = "/storage";
 
-
-    private final static String SOUND_DIR = "/DCIM/HORROR/";
-
-    private FileStorage() {
+    private FileUtils() {
     }
 
-    public static String findMediaFileByFirstLetters(String firstLetters) {
+    public static String getFilePathByFirstLetters(String dir, String firstLetters) {
         if (firstLetters == null) {
             return null;
         }
@@ -26,18 +23,18 @@ public final class FileStorage {
             Log.e(TAG, "Не найден внешний накопитель");
             return null;
         }
-        File soundDir = new File(externalStorageRootDir + SOUND_DIR);
-        if (soundDir.exists()) {
-            String result = Arrays.stream(Objects.requireNonNull(soundDir.listFiles()))
+        File fullDirPath = new File(externalStorageRootDir + "/" + dir);
+        if (fullDirPath.exists()) {
+            String result = Arrays.stream(Objects.requireNonNull(fullDirPath.listFiles()))
                     .peek(f -> System.out.println("before first letters " + f.getPath()))
                     .filter(f -> f.getName().toLowerCase().startsWith(firstLetters.toLowerCase()))
                     .map(File::getPath)
                     .findFirst()
                     .orElse(null);
-            Log.i(TAG, "findMediaFileByFirstLetters() result " + result);
+            Log.i(TAG, "getFilePathByFirstLetters() result " + result);
             return result;
         }
-        Log.i(TAG, "!(soundDir.exists()) " + soundDir.getPath());
+        Log.i(TAG, "!(fullDirPath.exists()) " + fullDirPath.getPath());
         return null;
     }
 

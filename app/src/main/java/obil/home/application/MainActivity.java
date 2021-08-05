@@ -1,7 +1,8 @@
-package obil.home.smshandler;
+package obil.home.application;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Application;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import java.util.Arrays;
+
+import obil.home.application.AppContainer;
+import obil.home.application.ThisApplication;
+import obil.home.smshandler.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,32 +29,27 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private static final String TAG = "MainActivity";
-    private Thread heartBeatThread;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         verifyPermissions(this, PERMISSIONS_STORAGE);
-        SoundPlayerHandler soundPlayerHandler = new SoundPlayerHandler();
+        AppContainer container = ((ThisApplication) this.getApplication()).container;
         IntentFilter filter = new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
-        registerReceiver(soundPlayerHandler, filter);
+        registerReceiver(container.smsController, filter);
 
-        heartBeatThread = new Thread(new HeartBitSender(soundPlayerHandler, getApplicationContext()));
-        heartBeatThread.start();
-
-        Button testButton = (Button) findViewById(R.id.button);
+      /* Button testButton = (Button) findViewById(R.id.button);
         testButton.setOnClickListener(v -> {
             soundPlayerHandler.handleSmsText(MainActivity.this, "m1");
-        });
+        });*/
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (heartBeatThread != null) {
-            heartBeatThread.interrupt();
-        }
+        ((ThisApplication) this.getApplication()).container.onDestroy();
     }
 
     private void verifyPermissions(Activity activity, String[] permissionsStorage) {
