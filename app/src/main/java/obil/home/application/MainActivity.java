@@ -37,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         verifyPermissions(this, PERMISSIONS_STORAGE);
         AppContainer container = ((ThisApplication) this.getApplication()).container;
+        container.postPermission();
         IntentFilter filter = new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
         registerReceiver(container.smsController, filter);
+
 
       /* Button testButton = (Button) findViewById(R.id.button);
         testButton.setOnClickListener(v -> {

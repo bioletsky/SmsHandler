@@ -13,8 +13,8 @@ public class AppContainer {
     public AudioService audioService = new AudioServiceImpl(bluetoothTickler);
     public BroadcastReceiver smsController = new SmsController(audioService);
 
-    public AppContainer() {
-        audioService.postConstruct();
+    public void postPermission() {
+        bluetoothTickler.run(audioService);
     }
 
     public void onDestroy() {

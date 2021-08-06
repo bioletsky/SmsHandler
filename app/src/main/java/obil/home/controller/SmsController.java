@@ -46,7 +46,7 @@ public class SmsController extends BroadcastReceiver {
                 Log.i(TAG, "Media file not found");
                 return;
             }
-            audioService.play(smsText);
+            audioService.play(file);
         }
     }
 }

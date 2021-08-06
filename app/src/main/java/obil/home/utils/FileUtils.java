@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public final class FileUtils {
-    private static final String TAG = "FileUtils";
+    private static final String TAG = FileUtils.class.getName();
     private static final String EMULATED_DIR = "emulated";
     private static final String STORAGE_DIR = "/storage";
 

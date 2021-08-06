@@ -6,9 +6,9 @@ import android.util.Log;
 import obil.home.controller.SmsController;
 
 public class AudioServiceImpl implements AudioService {
-    private static final String TAG = SmsController.class.getName();
+    private static final String TAG = AudioServiceImpl.class.getName();
 
-    private MediaPlayer mediaPlayer =  new MediaPlayer();
+    private MediaPlayer mediaPlayer = new MediaPlayer();
     private BluetoothTickler bluetoothTickler;
 
     public AudioServiceImpl(BluetoothTickler bluetoothTickler) {
@@ -17,26 +17,25 @@ public class AudioServiceImpl implements AudioService {
 
     }
 
-    public void postConstruct() {
-        bluetoothTickler.run(this);
-    }
-
     @Override
     public synchronized void stop() {
-        mediaPlayer.stop();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
     }
 
     @Override
     public synchronized void play(String file) {
+        Log.i(TAG, "Play file: " + file);
         stop();
         try {
             bluetoothTickler.resetExecuteTime();
-
+            mediaPlayer.reset();
             mediaPlayer.setDataSource(file);
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (Exception e) {
-            Log.e(TAG, "Ошибка при проигрывании файла " + file);
+            Log.e(TAG, "Error playing file: " + e.getMessage());
         }
     }
 
