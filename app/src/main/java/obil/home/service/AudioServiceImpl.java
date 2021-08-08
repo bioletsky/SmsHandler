@@ -9,13 +9,6 @@ public class AudioServiceImpl implements AudioService {
     private static final String TAG = AudioServiceImpl.class.getName();
 
     private MediaPlayer mediaPlayer = new MediaPlayer();
-    private BluetoothTickler bluetoothTickler;
-
-    public AudioServiceImpl(BluetoothTickler bluetoothTickler) {
-
-        this.bluetoothTickler = bluetoothTickler;
-
-    }
 
     @Override
     public synchronized void stop() {
@@ -29,7 +22,6 @@ public class AudioServiceImpl implements AudioService {
         Log.i(TAG, "Play file: " + file);
         stop();
         try {
-            bluetoothTickler.resetExecuteTime();
             mediaPlayer.reset();
             mediaPlayer.setDataSource(file);
             mediaPlayer.prepare();

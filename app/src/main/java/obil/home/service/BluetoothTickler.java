@@ -1,7 +1,8 @@
 package obil.home.service;
 
 public interface BluetoothTickler {
-    void run(AudioService audioService);
+    void run();
+
     void stop();
-    void resetExecuteTime();
+
 }
